@@ -19,7 +19,7 @@ This project is completely built on the foundation powered by Udacity, which can
    - Using npm
 
    ```bash
-   cd employee-polls
+   cd polls
 
    npm install #install all dependencies
 
