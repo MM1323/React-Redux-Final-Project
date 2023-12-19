@@ -89,13 +89,3 @@ This project is completely built on the foundation powered by Udacity, which can
 ## Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). You can find more information on how to perform common tasks [here](https://github.com/facebook/create-react-app/blob/main/packages/cra-template/template/README.md).
-
-## Contributing
-
-This repository is my second project using ReactJS, and was an exercise during my participation in [React Udacity NanoDegree](https://learn.udacity.com/nanodegrees/nd019). After the review is approved, I will not continue working, maintain this repository any more.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-See [Udacity's license](starter/LICENSE.txt).
