@@ -1,12 +1,14 @@
-import { combineReducers } from "redux";
-import authedUser from "./authedUser";
-import users from "./users";
-import questions from "./questions";
-import { loadingBarReducer } from "react-redux-loading-bar";
+import { combineReducers } from 'redux';
+import employeesReducer from './employeesReducer';
+import questionsReducer from './questionsReducer';
+import authedUserReducer from './authedUserReducer';
+import navbarReducer from './navBarReducer';
 
-export default combineReducers({
-  authedUser,
-  users,
-  questions,
-  loadingBar: loadingBarReducer,
+const reducer = combineReducers({
+  authedUser: authedUserReducer,
+  questions: questionsReducer,
+  employees: employeesReducer,
+  navbar: navbarReducer,
 });
+
+export default reducer;

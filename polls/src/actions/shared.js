@@ -1,28 +1,50 @@
-import { getInitialData } from "../utils/apis";
-import { receiveUsers } from "./users";
-import { receiveQuestions } from "./questions";
-import { showLoading, hideLoading } from "react-redux-loading-bar";
-import { setAuthedUser } from "./authedUser";
+import { getInitialData, saveQuestionAnswer } from '../util/api';
+import { receiveEmployees, addAnswerToUser } from './employeesActions';
+import { receiveQuestions, addAnswerToQuestion } from './questionsActions';
+import { setAuthedUser } from './authedUserActions';
+import { authenticate } from '../util/api';
 
 export function handleInitialData() {
   return (dispatch) => {
-    dispatch(showLoading());
-    return getInitialData().then(({ users, questions }) => {
-      dispatch(receiveUsers(users));
-      dispatch(receiveQuestions(questions));
-      dispatch(hideLoading());
-    });
+    return getInitialData()
+      .then(({ employees, questions, id }) => {
+        dispatch(receiveQuestions(questions));
+        dispatch(receiveEmployees(employees));
+        dispatch(setAuthedUser(id));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+}
+export function handleLogin(username, password) {
+  return (dispatch) => {
+    return authenticate(username, password)
+      .then(dispatch(setAuthedUser(username)))
+      .catch((e) => {
+        console.log('unable to login', e);
+      });
   };
 }
 
-export function handleLogIn(userId) {
-  return (dispatch) => {
-    return dispatch(setAuthedUser(userId));
-  };
-}
+export function handleQuestionAnswered(question, answer, authedUser) {
+  return (dispatch, getState) => {
+    const { authedUser, questions } = getState();
+    // call the api
+    return saveQuestionAnswer(authedUser, question, answer)
+      .then((savedQuestion) => {
+        // handle state
+        dispatch(addAnswerToQuestion(authedUser, question, questions, answer));
+      })
 
-export function handleLogOut() {
-  return (dispatch) => {
-    return dispatch(setAuthedUser(null));
+      .then((savedQuestion) => {
+        // handle state
+        dispatch(addAnswerToUser(authedUser, question, answer));
+      })
+
+      .catch((e) => {
+        // todo: cleanup on failure
+        console.error(e);
+      });
   };
 }

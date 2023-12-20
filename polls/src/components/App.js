@@ -1,47 +1,39 @@
-import { Fragment, useEffect } from "react";
-import { connect } from "react-redux";
-import { handleInitialData } from "../actions/shared";
-import { Routes, Route } from "react-router-dom";
-import LoginPage from "./LoginPage";
-import NavigationBar from "./NavigationBar";
-import { LoadingBar } from "react-redux-loading-bar";
-import Leaderboard from "./Leaderboard";
-import NewQuestion from "./NewQuestion";
-import Dashboard from "./Dashboard";
-import QuestionDetail from "./QuestionDetail";
-import NotFoundPage from "./NotFoundPage";
+import '../App.css';
+import { useEffect } from 'react';
+import { handleInitialData } from '../actions/shared';
+import Home from './Home';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Questions from './Questions';
+import Leaderboard from './Leaderboard';
+import AddNewQuestion from './AddNewQuestion';
+import NavBar from './NavBar';
+import QuestionDetail from './QuestionDetailPage';
+import Login from './Login';
 
-const App = (props) => {
-  useEffect(() => {
-    props.dispatch(handleInitialData());
-  }, []);
+const App = ({ dispatch, employees, questions, id }) => {
+  useEffect(
+    () => {
+      dispatch(handleInitialData());
+    },
+    // https://react-redux.js.org/api/hooks#usedispatch
+    // safely pass dispatch as dependency. it is stable as long as the store is
+    [dispatch]
+  );
 
   return (
-    <Fragment>
-      <LoadingBar />
-      <div className="container">
-        {props.isLoggedIn === false ? null : <NavigationBar />}
-        {props.isLoggedIn === false ? (
-          <LoginPage />
-        ) : (
+    <div className="app">
+      <BrowserRouter>
+        <NavBar />
           <Routes>
-            <Route path="*" exact element={<NotFoundPage />} />
-            <Route path="/" exact element={<Dashboard />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/questions" element={<Questions />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/add" element={<NewQuestion />} />
-            <Route
-              path="/questions/:question_id"
-              element={<QuestionDetail />}
-            />
+            <Route path="/add" element={<AddNewQuestion />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/question/:id" element={<QuestionDetail />} />
           </Routes>
-        )}
-      </div>
-    </Fragment>
+      </BrowserRouter>
+    </div>
   );
 };
-
-const mapStateToProps = ({ authedUser }) => ({
-  isLoggedIn: authedUser != null,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;
